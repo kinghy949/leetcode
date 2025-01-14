@@ -1,0 +1,33 @@
+### 解题思路
+
+递归递归递归递归
+
+### 代码
+
+* java
+
+```java
+class Solution {
+    public List<String> generateParenthesis(int n) {
+        List<String> result = new ArrayList<>();
+        back(n,result,0,0,"");
+        return result;
+    }
+    private void back(int n,List<String> result,int left,int right,String str){
+        if(right>left){
+            return;
+        }
+        if(left==n&&right==n){
+            result.add(str);
+            return;
+        }
+        if(left<n){
+            back(n,result,left+1,right,str+"(");
+        }
+        if(left>right){
+            back(n,result,left,right+1,str+")");
+        }
+    }
+}
+```
+

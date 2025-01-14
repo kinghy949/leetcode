@@ -1,0 +1,60 @@
+> Problem: [39. 组合总和](https://leetcode.cn/problems/combination-sum/description/)
+
+[TOC]
+
+# 思路
+
+'''
+答案视角，枚举答案的第一个位置是谁
+回溯三问：
+1. 当前操作，从下标j>=i的元素中，找到一个加入path
+2. 子问题：从下标>=i的元素中，构建和满足left的组合
+3. 下一个子问题：从下标>=j的元素中，构造和满足left-candidates[j]的组合【注意是j，而不是j+1，因为元素可以重复选】
+
+    时间复杂度O(nlogn+cnk)【粗略估计】
+    空间复杂度O(target)：返回值不计入。path 长度和递归深度至多为 O(target)。
+    '''
+
+# Code
+
+* []
+
+```Python
+class Solution:
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        '''
+        答案视角，枚举答案的第一个位置是谁
+        回溯三问：
+        1. 当前操作，从下标j>=i的元素中，找到一个加入path
+        2. 子问题：从下标>=i的元素中，构建和满足left的组合
+        3. 下一个子问题：从下标>=j的元素中，构造和满足left-candidates[j]的组合
+
+        时间复杂度O(nlogn+cnk)【粗略估计】
+        空间复杂度O(target)：返回值不计入。path 长度和递归深度至多为 O(target)。
+        '''
+        candidates.sort()
+        res = []
+        path = []
+        n = len(candidates)
+
+        # left表示剩余要选的元素之和
+        def dfs(i, left):
+            # left为0代表已经找到了满足target的组合
+            if left == 0:
+                res.append(path.copy())
+                return
+            
+            # left < candidates[i]代表left小于剩下的最小元素【因为已经排序】
+            if left < candidates[i]: # 剪枝
+                return 
+
+            for j in range(i, n):
+                path.append(candidates[j])
+                dfs(j, left-candidates[j]) # 注意这里不是j+1，因为可以重复
+                path.pop() # 恢复现场
+            
+        dfs(0, target)
+        return res
+            
+```
+
